@@ -5,15 +5,20 @@ pub mod collections {
         pub fn init_vec() -> Vec<String> {
             Vec::new()
         }
-        
-        pub fn p() {
-            println!("3");
-        }
     }
 
     pub mod string {
         pub fn init_string() -> String {
             String::new()
+        }
+
+        pub fn vec_to_string(v: Vec<String>) -> String {
+            let mut string = String::from("");
+            for word in v {
+                string.push_str(&word);
+                string.push_str(" ");
+            }
+            string.to_string()
         }
     }
 
@@ -37,18 +42,22 @@ pub mod collections {
 fn main() {
     let mut v = collections::vector::init_vec();
     let mut hash = collections::hash::init_hash();
+    println!("Enter a word. To exit, type 'exit'.");
+    println!("To see how many times a word was entered, type 'hash'.");
     loop {
         let mut word = collections::string::init_string();
-        println!("Enter a word. To exit, type 'exit'");
         io::stdin().read_line(&mut word).expect("what did you type?");
         let word: String = word.trim().parse().expect("Somoething went wrong, try again!");
         match &word[..] {
-            "exit" => break,
-            "output" => todo!("print vec as string"),
+            "exit" => {
+                println!("{}", collections::string::vec_to_string(v.clone()));
+                break
+            },
             "hash" => {
                 for(key, value) in &hash {
                     println!("{key}: {value}");
                 }
+                println!("Enter another word:");
             },
             _ => {
                 let value: Option<&u32> = collections::hash::get_hash(&hash, &word);
@@ -59,6 +68,7 @@ fn main() {
                 }
                 collections::hash::add_to_hash(&mut hash, &word, count);
                 v.push(word);
+                println!("Enter another word:");
             },
         }
     }
