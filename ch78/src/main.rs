@@ -25,11 +25,17 @@ pub mod collections {
 fn main() {
     let mut v = collections::vector::init_vec();
 
-    println!("Enter a word. To exit, type 'exit'");
-    let mut word = collections::string::init_string();
-    while word != "exit" {
+    
+    loop {
+        let mut word = collections::string::init_string();
+        println!("Enter a word. To exit, type 'exit'");
         io::stdin().read_line(&mut word).expect("what did you type?");
-        v.push(word);
-
+        let word: String = word.trim().parse().expect("Somoething went wrong, try again!");
+        match &word[..] {
+            "exit" => break,
+            "output" => todo!("print vec as string"),
+            "hash" => todo!("hash"),
+            _ => v.push(word),
+        }
     }
 }
